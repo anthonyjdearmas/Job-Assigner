@@ -1,0 +1,365 @@
+WindowManager:
+    MainWindow:
+    SettingsWindow:
+
+<MainWindow>:
+    name:"main"
+    FloatLayout:
+        #Background
+        Widget:
+            canvas.before:
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+                    source: "Images/logo_br.png"
+        Button:
+            size_hint: 0.06, 0.06
+            pos_hint: {"x":.945, "y":.945}
+            text: 'X'
+            background_color: 1,0,0,1
+            on_release:
+                app.stop()
+        #Logo/Credit
+        Image:
+            source: 'Images/logo.png'
+            allow_stretch: True
+            size_hint: 0.2, 0.2
+            pos_hint: {"x":0.01, "y":0.77}
+        Label:
+            text:"Job Assigner"
+            bold:True
+            italic:True
+            size: self.texture_size
+            pos_hint: {"x":-0.39, "y":0.275}
+            color: 1,1,1,1
+        Label:
+            text:"Created by: Anthony DeArmas"
+            bold:True
+            italic:True
+            size: self.texture_size
+            pos_hint: {"x":0.35, "y":-0.46}
+            color: 0,0,0,.2
+        #Main Menu Buttons
+        Button:
+            size_hint: 0.3, 0.1
+            pos_hint: {"x":0.15, "y":0.5}
+            text: 'Configuration'
+            background_color: 1,1,1,.6
+            on_release:
+                app.root.current = "settings"
+                root.manager.transition.direction = 'left'
+        Image:
+            source: 'Images/icon_cog.png'
+            allow_stretch: True
+            size_hint: 0.04, 0.04
+            pos_hint: {"x":0.205, "y":0.53}
+        Button:
+            size_hint: 0.3, 0.1
+            pos_hint: {"x":0.6, "y":0.5}
+            text: 'GitHub'
+            background_color: 1,1,1,.6
+            on_release:
+                root.open_GitHub()
+        Image:
+            source: 'Images/icon_qmark.png'
+            allow_stretch: True
+            size_hint: 0.05, 0.05
+            pos_hint: {"x":0.68, "y":0.525}
+        Button:
+            size_hint: 0.3, 0.1
+            pos_hint: {"x":0.377, "y":0.3}
+            text: 'Assign Jobs'
+            on_press: root.assign_Jobs()
+            background_color: 1,1,1,.6
+        Image:
+            source: 'Images/icon_notepad.png'
+            allow_stretch: True
+            size_hint: 0.035, 0.035
+            pos_hint: {"x":0.442, "y":0.335}
+# Successful job assignment pop up
+<PopupJobsAssigned>:
+    Label:
+        text: "Job assignment successful!"
+        color: 0,1,0,1
+        font_size: 13
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.9}
+    Label:
+        text: "Go to assignments folder to see results."
+        color: 0,1,0,1
+        font_size: 10
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.75}
+    Label:
+        text: "Click outside of the box to continue..."
+        font_size: 10
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.3}
+
+<SettingsWindow>:
+    name:"settings"
+    on_pre_enter:
+        root.Pretty_Print_People(root.get_People())
+        root.Pretty_Print_Jobs(root.get_Jobs())
+    FloatLayout:
+    Widget:
+        canvas.before:
+            # Background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+                source: "Images/logo_br.png"
+            # People Menu
+            Color:
+                rgba: 1,1,1,.3
+            Rectangle:
+                size: 200, 500
+                pos: self.width/10, self.height/7
+            Color:
+                rgba: 0,0,0,.5
+            Rectangle:
+                size: 190, 350
+                pos: self.width/9.4, self.height/3
+            # Jobs Menu
+            Color:
+                rgba: 1,1,1,.3
+            Rectangle:
+                size: 200, 500
+                pos: self.width/2.5, self.height/7
+            Color:
+                rgba: 0,0,0,.5
+            Rectangle:
+                size: 190, 350
+                pos: self.width/2.465, self.height/3
+            # Export Menu
+            Color:
+                rgba: 1,1,1,.3
+            Rectangle:
+                size: 200, 250
+                pos: self.width/1.43, self.height/3.08
+            Color:
+                rgba: 0,0,0,.5
+            Rectangle:
+                size: 190, 205
+                pos: self.width/1.416, self.height/3
+    # People Scroll List
+    ScrollView:
+        size_hint: (None, None)
+        size: (150, 325)
+        pos_hint: {'center_x': .23, 'center_y': .62}
+        # People Menu Scroll Label
+        Label:
+            size_hint: None, None
+            size: self.texture_size
+            text: root.pretty_list_people
+        # Jobs Menu Scroll Label
+    ScrollView:
+        size_hint: (None, None)
+        size: (150, 325)
+        pos_hint: {'center_x': .53, 'center_y': .62}
+        Label:
+            size_hint: None, None
+            size: self.texture_size
+            text: root.pretty_list_jobs
+    Button:
+        text:"Back"
+        size_hint: 0.1, 0.1
+        pos_hint: {"x":0, "y":0}
+        background_color: 1,1,1,1
+        on_release:
+            app.root.current = "main"
+            root.manager.transition.direction = 'right'
+    # People Title
+    Label:
+        text: "People"
+        font_size: 30
+        italic: True
+        pos_hint: {"x":-0.275, "y":0.45}
+        color: 0,0,0,1
+    # Jobs Title
+    Label:
+        text: "Jobs"
+        font_size: 30
+        italic: True
+        pos_hint: {"x":0.02, "y":0.45}
+        color: 0,0,0,1
+    # Exporting Title
+    Label:
+        text: "Exporting"
+        font_size: 30
+        italic: True
+        pos_hint: {"x":0.325, "y":0.21}
+        color: 0,0,0,1
+    # People Menu Buttons
+    Button:
+        text:"Add"
+        size_hint: 0.125, 0.09
+        pos_hint: {"x":0.1, "y":0.243}
+        on_press: root.showpop_addperson()
+    Button:
+        text:"Remove"
+        size_hint: 0.125, 0.09
+        pos_hint: {"x":0.225, "y":0.243}
+        on_press: root.showpop_removebro()
+    Button:
+        text:"Update"
+        size_hint: 0.25, 0.1
+        pos_hint: {"x":0.1, "y":0.144}
+        on_press: root.Pretty_Print_People(root.get_People())
+    # Jobs Menu Buttons
+    Button:
+        text:"Add"
+        size_hint: 0.125, 0.09
+        pos_hint: {"x":0.4, "y":0.243}
+        on_press: root.showpop_addjob()
+    Button:
+        text:"Remove"
+        size_hint: 0.125, 0.09
+        pos_hint: {"x":0.525, "y":0.243}
+        on_press: root.showpop_removejob()
+    Button:
+        text: "Update"
+        size_hint: 0.25, 0.1
+        pos_hint: {"x":0.4, "y":0.144}
+        on_press: root.Pretty_Print_Jobs(root.get_Jobs())
+    # Exporting Menu Content
+    Button:
+        id: txtexport
+        group: 'exportopts'
+        text: "Toggle Text File Export"
+        size_hint: 0.236, 0.08
+        pos_hint: {"x":0.707, "y":0.59}
+        on_press: root.enableexport_text()
+    Button:
+        id: exlexport
+        group: 'exportopts'
+        text: "Toggle Excel File Export"
+        size_hint: 0.236, 0.08
+        pos_hint: {"x":0.707, "y":0.51}
+        on_press: root.enableexport_excel()
+        
+<Popupaddperson>:
+    person_name: person_name
+    Label:
+        text: "Type the name of the person \n     you want to add below."
+        font_size: 11
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.95}
+    TextInput:
+        id: person_name
+        multiline: False
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "y":0.5}
+    Button:
+        text: "Add"
+        on_press: 
+            root.append_Newperson()
+        size_hint: 0.6, 0.3
+        pos_hint: {"x":0.2, "y":0.02}
+
+<PopupPersonAdded>:
+    Label:
+        text: "Person added!"
+        color: 0,1,0,1
+        font_size: 20
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.9}
+    Label:
+        text: "Click outside of the box to continue..."
+        font_size: 10
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.3}
+
+<PopupRemovePerson>:
+    person_name: person_name
+    Label:
+        text: "Type the name of the person \n   you want to remove below."
+        font_size: 11
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.95}
+    TextInput:
+        id: person_name
+        multiline: False
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "y":0.5}
+    Button:
+        text: "Remove"
+        on_press: root.remove_Person()
+        size_hint: 0.6, 0.3
+        pos_hint: {"x":0.2, "y":0.02}
+
+<PopUpPersonremoved>:
+    Label:
+        text: "Person removed!"
+        color: 0,1,0,1
+        font_size: 20
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.9}
+    Label:
+        text: "Click outside of the box to continue..."
+        font_size: 10
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.3}
+
+<PopupAddJob>:
+    jobname: jobname
+    Label:
+        text: "Type the name of the job \n   you want to add below."
+        font_size: 11
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.95}
+    TextInput:
+        id: jobname
+        multiline: False
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "y":0.5}
+    Button:
+        text: "Add"
+        on_press: root.append_Newjob()
+        size_hint: 0.6, 0.3
+        pos_hint: {"x":0.2, "y":0.02}
+
+<PopupJobAdded>:
+    Label:
+        text: "Job added!"
+        color: 0,1,0,1
+        font_size: 20
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.9}
+    Label:
+        text: "Click outside of the box to continue..."
+        font_size: 10
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.3}
+
+<PopupRemoveJob>:
+    jobname: jobname
+    Label:
+        text: "Type the name of the job \nyou want to remove below."
+        font_size: 11
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.95}
+    TextInput:
+        id: jobname
+        multiline: False
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "y":0.5}
+    Button:
+        text: "Remove"
+        on_press: root.remove_Job()
+        size_hint: 0.6, 0.3
+        pos_hint: {"x":0.2, "y":0.02}
+
+<PopupJobRemoved>:
+    Label:
+        text: "Job removed!"
+        color: 0,1,0,1
+        font_size: 20
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.9}
+    Label:
+        text: "Click outside of the box to continue..."
+        font_size: 10
+        size_hint: 0.6, 0.15
+        pos_hint: {"x":0.2, "top":0.3}
+    
